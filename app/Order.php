@@ -12,7 +12,8 @@ class Order extends Model
         'contact_number',
         'price',
         'problem',
-        'status'
+        'status',
+        'assigned_to'
     ];
     public function department(){
         if($this->status=='ordered'){
@@ -27,5 +28,8 @@ class Order extends Model
         if($this->status=='completed'){
             return 'logistics';
         }
+    }
+    public function rider(){
+        return User::find($this->assigned_to);
     }
 }

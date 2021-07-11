@@ -16,14 +16,26 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
 Route::get('/','OrderController@create');
+Route::post('/order','OrderController@store');
+Route::get('/logout',function(){
+    Auth::logout();
+    return redirect('/login');
+});
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('/order','OrderController@index');
-    Route::post('/order','OrderController@store');
+    Route::get('/orderindex','OrderController@index');
+    
     Route::get('/order/{id}',"OrderController@show");
-    Route::get('/ccupdate/{id}','OrderController@updateorder');
+    Route::post('orderupdate/{id}','OrderController@updateorder');
+    Route::get('/ordercancel/{id}',"OrderController@cancelorder");
+    Route::get('/ccupdate','OrderController@AssignRider');
 
     Route::get('/rider','RiderController@index');
+    Route::get('pick/{id}','OrderController@pickorder');
+
+    Route::get('mechanic','MechanicController@index');
+    Route::get('/mechanic/{id}','MechanicController@updatestatus');
+    
 });

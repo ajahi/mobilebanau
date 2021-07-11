@@ -6,6 +6,7 @@ use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\User;
 
 class OrderController extends Controller
 {
@@ -14,11 +15,13 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {   $user = Auth::user();
+        
         if ($user->role(['admin'])){
-            return view('orderindex',[
-                'order'=>Order::orderBy('id','DESC')->get()
+            return view('cms.orderindex',[
+                'posts'=>Order::orderBy('id','DESC')->get()
+                
             ]);
         }else{
             $return = ["status" => "error",
@@ -38,7 +41,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view('order');
+        return view('layouts.frontend');
     }
 
     /**
@@ -52,7 +55,7 @@ class OrderController extends Controller
         $validation = Validator::make($request->all(), [
             'name'=>['required'],
             'contact_number'=>'required|numeric|min:10',
-            'problem'=>['required'],
+         
             'address'=>['required']
 
         ]);
@@ -61,7 +64,7 @@ class OrderController extends Controller
         }
 
         $order=Order::create($request->all());
-        return redirect('/order');
+        return redirect()->back()->with('success','You have successfully requested a order.');
     }
 
     /**
@@ -74,7 +77,10 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         if ($user->role(['admin'])){
-            return view('order1st',['order'=>Order::findOrFail($id)]);
+            return view('cms.ordershow',[
+                'order'=>Order::findOrFail($id),
+                'rider'=>User::role('rider')->get()
+            ]);
         }
         $return = ["status" => "error",
                 "error" => [
@@ -83,28 +89,63 @@ class OrderController extends Controller
                 ]];
             return response()->json($return, 403);
     }
+    
     public function updateorder(Request $request,$id){
+       
         $user=Auth::user();
-        if ($user->role('admin')){
+        $order=Order::findOrFail($id);
+        if ($user->role('admin') && $order->status!=='canceled'){
             $validation = Validator::make($request->all(), [
-                'status'=>['required','in:canceled,confirmed']
+                'problem'=>['required'],
+                'price'=>['required','numeric'],
+                'rider'=>['required','numeric']
             ]);
             if ($validation->fails()) {
                 return response()->json($validation->errors(),422);
             }
-            $order=Order::findOrFail($id);
-            $order->status=$request->status;
+            
+            $order->status='confirmed';
+            $order->problem=$request->problem;
+            $order->cost=$request->price;
+            $order->assigned_to=$request->rider;
             $order->save();
-            return redirect('/order')->with('success','You have successfully updated a order');
+            return redirect('/orderindex')->with('success','You have successfully updated a order');
         }else{
             $return = ["status" => "error",
                 "error" => [
                     "code" => 403,
                     "errors" => 'Forbidden'
                 ]];
-            return response()->json($return, 403);
+            return redirect('/orderindex')->with('warning','If Order is already canceled you cannot update it');
         }
         
+    }
+    public function cancelorder($id){
+        $user=Auth::user();
+        if ($user->role(['admin','customer_care'])){
+            $order=Order::findOrFail($id);
+            $order->status='canceled';
+            $order->save();
+            return redirect('/orderindex')->with('warning','You have successfully cancelled a order');
+        }$return = ["status" => "error",
+                "error" => [
+                    "code" => 403,
+                    "errors" => 'Forbidden'
+                ]];
+            return response()->json($return, 403);
+    }
+    public function pickorder($id){
+        $user=Auth::user();
+        if ($user->role(['admin','rider'])){
+            
+            $order=Order::findOrFail($id);
+            if($order->status=='confirmed'){
+                $order->status='picked';
+                $order->save();
+            }else{
+                return redirect()->back()->with('alert','Order cannot be picked');
+            }
+        }return redirect('mechanic')->with('success','You have picked a order successfully');
     }
     
 

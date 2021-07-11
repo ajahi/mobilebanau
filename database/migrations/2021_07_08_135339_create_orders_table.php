@@ -17,10 +17,11 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('address')->nullable();
-            $table->integer('contact_number')->unsigned();
+            $table->bigInteger('contact_number')->unsigned();
             $table->string('status')->default('ordered');
-            $table->text('problem');
+            $table->text('problem')->nullable();
             $table->integer('cost')->nullable();
+            $table->integer('assigned_to')->nullable();
             $table->timestamps();
         });
     }

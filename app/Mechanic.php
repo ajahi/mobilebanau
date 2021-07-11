@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Mechanic extends Model
 {
-    protected $fillable=['name','experties','dob','citizenship_details'];
+    protected $fillable=['name','experties','dob','citizenship_num','verified'];
     
 }

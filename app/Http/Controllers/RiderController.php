@@ -14,12 +14,22 @@ class RiderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $user=Auth::user();
+    public function index(Request $request)
+    {   
+        $user=Auth::user(); 
         if($user->role(['rider','admin'])){
-            return view ('riderindex',[
-                'order'=>Order::where('status','confirmed')->orderBy('created_at','DESC')->get()
+            $posts = Order::orderBy('id', 'DESC');
+           if(!is_null($request->get('status'))){
+            
+               $posts=Order::where('status',$request->get('status'));
+               
+           }else{
+               $posts=Order::where('status','picked');
+           }
+            
+            
+            return view ('cms.riderindex',[
+                'posts'=>$posts->get()
             ]);
         }$return = ["status" => "error",
                 "error" => [

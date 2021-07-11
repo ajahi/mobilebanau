@@ -15,6 +15,20 @@ class CreateRidersTable extends Migration
     {
         Schema::create('riders', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name');
+            $table->date('dob');
+            $table->bigInteger('citizenship_no')->unsigned();
+            $table->bigInteger('license_registration_number')->unsigned();
+            $table->boolean('verified')->default(0);
+            $table->timestamps();
+        });
+        Schema::create('mechanics', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->date('dob');
+            $table->string('experties');
+            $table->bigInteger('citizenship_no')->unsigned();
+            $table->boolean('verified')->default(0);
             $table->timestamps();
         });
     }
@@ -27,5 +41,6 @@ class CreateRidersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('riders');
+        Schema::dropIfExists('mechanics');
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+Use App\Order;
+
 
 class MechanicController extends Controller
 {
@@ -15,8 +18,8 @@ class MechanicController extends Controller
     {
         $user=Auth::user();
         if($user->role(['mechanic','admin'])){
-            return view ('mechanicindex',[
-                'order'=>Order::where('status','picked')->orderBy('created_at','DESC')->get()
+            return view ('cms.mechanicindex',[
+                'posts'=>Order::where('status','picked')->orWhere('status','repaired')->orderBy('id','DESC')->get()
             ]);
         }$return = ["status" => "error",
                 "error" => [
@@ -24,6 +27,19 @@ class MechanicController extends Controller
                     "errors" => 'Forbidden'
                 ]];
             return response()->json($return, 403);
+    }
+    public function updatestatus($id){
+        $user=Auth::user();
+        if($user->role(['mechanic','admin'])){
+            $order=Order::findOrFail($id);
+            if($order->status='picked'){
+                $order->status='repaired';
+                $order->save();
+                return redirect('/mechanic')->with('success','You have successfully updated the order.');
+            }
+            return redirect('/mechanic')->with('alert','You are not authorized to make status update');
+        }return redirect('mechanic')->with('alert','You are not authorized to make status update');
+
     }
 
     /**
