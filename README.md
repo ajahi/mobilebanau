@@ -76,3 +76,22 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+The Laravel framework is open-sourced software licensed under the MIT license.
+
+//developer note
+
+requirement of system -node v10.19.0 -php v7.3.25 -composer v1 -wamp/xamp or any sqldb according to system
+
+installation steps
+ 1.git clone https://github.com/ajahi/mobilebanau.git<br>
+ 2.composer install <br>
+ 3. cp .env.example .env <br>
+ 4. db auta setup garne name rakhera <br>
+ 5. in .env <br>
+
+DB_DATABASE={{db name}}
+DB_USERNAME={{username of db}}
+DB_PASSWORD={{ password of db}}
+npm install,npm run dev 7.php artisan migrate 8.php artisan db:seed the program must run now
