@@ -82,7 +82,11 @@ The Laravel framework is open-sourced software licensed under the MIT license.
 
 //developer note
 
-requirement of system -node v10.19.0 -php v7.3.25 -composer v1 -wamp/xamp or any sqldb according to system
+requirement of system <br>
+-node v10.19.0 <br>
+ -php v7.3.25 <br>
+ -composer v1 <br>
+ -wamp/xamp or any sqldb according to system <br>
 
 installation steps
  1.git clone https://github.com/ajahi/mobilebanau.git<br>
