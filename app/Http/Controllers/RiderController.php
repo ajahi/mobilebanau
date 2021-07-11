@@ -38,6 +38,12 @@ class RiderController extends Controller
                 ]];
             return response()->json($return, 403);
     }
+    public function deliver($id){
+        $order=Order::findOrFail($id);
+        $order->status='delivered';
+        $order->save();
+        return redirect()->back()->with('success','You have successfully delivered a order');
+    }
 
     /**
      * Show the form for creating a new resource.

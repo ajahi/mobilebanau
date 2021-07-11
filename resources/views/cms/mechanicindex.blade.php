@@ -20,7 +20,7 @@
             <tbody>
                 <tr>
                     <td scope="col">{{ucwords($posts->id)}}</td>
-                    <td scope="col"><a href="/mechanic/{{$posts->id}}">{{$posts->name}}</a></td>
+                    <td scope="col"><a href="/order/{{$posts->id}}">{{$posts->name}}</a></td>
                     <td scope="col">{{$posts->contact_number}}</td>
                     <td scope="col">{{$posts->address}}</td>
                     <td scope="col">

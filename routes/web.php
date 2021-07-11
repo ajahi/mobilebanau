@@ -26,6 +26,7 @@ Route::get('/logout',function(){
 
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/orderindex','OrderController@index');
+
     
     Route::get('/order/{id}',"OrderController@show");
     Route::post('orderupdate/{id}','OrderController@updateorder');
@@ -34,6 +35,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('/rider','RiderController@index');
     Route::get('pick/{id}','OrderController@pickorder');
+    Route::get('deliver/{id}','RiderController@deliver');
 
     Route::get('mechanic','MechanicController@index');
     Route::get('/mechanic/{id}','MechanicController@updatestatus');

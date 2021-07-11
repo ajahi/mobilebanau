@@ -9,11 +9,10 @@
                     <form>
                         <span class=" d-inline-block my-2">
                             <select class="form-select custom-select catfilter" name="status" aria-label="filter by category" placeholder="Filter by category">
-                                <option value="">Select filter</option>
-                               
-                                    <option value="repaired" >Repaired</option>
+ 
                                     <option value="confirmed" >Confirmed</option>
                                     <option value="picked" >Picked</option>
+                                    <option value="repaired" >Repaired</option>
                                     <option value="delivered" >Delivered</option>
                                 
                             </select>
@@ -61,8 +60,11 @@
                     <td scope="col">{{ucwords($posts->rider()->name)}}</td>
                     @endif
                     <td scope="col">
-                    <a href="/pick/{{$posts->id}}"><button  @if($posts->status!=='confirmed') hidden @endif class="btn btn-primary"> Pick</button></a>
-                    
+                        @if($posts->status=='repaired')
+                        <a href="/deliver/{{$posts->id}}"><button   class="btn btn-primary"> Deliver</button></a>
+                        @else
+                        <a href="/pick/{{$posts->id}}"><button  @if($posts->status!=='confirmed') hidden @endif class="btn btn-primary"> Pick</button></a>
+                        @endif
                     </td>
                     <td>{{ucwords($posts->cost)}}</td>
                 </tr>

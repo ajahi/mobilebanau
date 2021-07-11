@@ -27,8 +27,11 @@
                     @endforeach
                 </select>
             </div>
+            @if($order->status=='picked')
+            <a href="/mechanic/{{$order->id}}"> <button class="btn btn-danger"> Repair Order </button></a>
+            @else
             <button type='Submit' class="btn btn-primary">Update Order</button>
-            
+            @endif
            <a href="/ordercancel/{{$order->id}}"> <button class="btn btn-danger"> Cancel Order </button></a>
         </li>
         </ul>
